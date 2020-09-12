@@ -6,4 +6,4 @@
 #include <stdio.h>
 
 cl_int initializeOpenCL();
-char* multiplyMatrix(char *, char*, int);
+char* multiplyMatrix(char *, char *, int);

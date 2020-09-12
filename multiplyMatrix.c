@@ -43,5 +43,8 @@ char *multiplyMatrix(const char *first_matrix, const char *second_matrix, int ma
         exit(1);
     }
 
+    clReleaseMemObject(first_matrix_buffer);
+    clReleaseMemObject(second_matrix_buffer);
+    clReleaseMemObject(result_matrix_buffer);
     return result;
 }

@@ -17,7 +17,7 @@ void initializeOpenCL() {
     }
 
     cl_device_id deviceIDs[1];
-    error = clGetDeviceIDs(platformIds[0], CL_DEVICE_TYPE_GPU, 1, deviceIDs, NULL);
+    error = clGetDeviceIDs(platformIds[0], CL_DEVICE_TYPE_ALL, 1, deviceIDs, NULL);
     if (error != CL_SUCCESS) {
         printf("Fail clGetDeviceIDs");
         exit(1);
@@ -64,4 +64,6 @@ void initializeOpenCL() {
         printf("Fail clCreateKernel");
         exit(1);
     }
+
+    clReleaseProgram(program);
 }
