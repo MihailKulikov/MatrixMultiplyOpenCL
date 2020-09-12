@@ -36,7 +36,7 @@ long loadCLKernel(const char* path, char **buf) {
         return -1L;
     }
 
-    (*buf)[file_size] = '\0';
+    (*buf)[read_elements_count] = '\0';
 
     return (long) read_elements_count;
 }
