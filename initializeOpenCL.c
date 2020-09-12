@@ -9,15 +9,15 @@ long loadCLKernel(const char* , char **);
 
 void initializeOpenCL() {
     cl_int error;
-    cl_platform_id platformIds[1];
-    error = clGetPlatformIDs(1, platformIds, NULL);
+    cl_platform_id platformIds[2];
+    error = clGetPlatformIDs(2, platformIds, NULL);
     if (error != CL_SUCCESS) {
         printf("Fail clGetPlatformIDs");
         exit(1);
     }
 
     cl_device_id deviceIDs[1];
-    error = clGetDeviceIDs(platformIds[0], CL_DEVICE_TYPE_ALL, 1, deviceIDs, NULL);
+    error = clGetDeviceIDs(platformIds[0], CL_DEVICE_TYPE_GPU, 1, deviceIDs, NULL);
     if (error != CL_SUCCESS) {
         printf("Fail clGetDeviceIDs");
         exit(1);
