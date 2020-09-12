@@ -1,14 +1,19 @@
-__kernel void matrixMult(__global const float* a, __global const float* b, __global float* c, int iNumElements)
+__kernel void
+matrixMult(__global char *result_matrix,
+    __global char *first_matrix,
+    __global char *second_matrix,
+    int matrix_order)
 {
-  // get index into global data array
-  int iGID = get_global_id(0);
-
-  // bound check (equivalent to the limit on a 'for' loop for standard/serial C code
-  if (iGID >= iNumElements)
-  {
-    return;
-  }
-
-  // add the vector elements
-  c[iGID] = a[iGID] + b[iGID];
+    int current_row = get_global_id(0);
+    int current_column = get_global_id(1);
+    char value = 0;
+    for (int i = 0; i < matrix_order; ++i)
+    {
+        char elementA = first_matrix[current_row * matrix_order + i];
+        char elementB = second_matrix[i * matrix_order + current_column];
+        value = elementA && elementB;
+        if (value)
+            break;
+    }
+    result_matrix[current_row * matrix_order + current_column] = value;
 }

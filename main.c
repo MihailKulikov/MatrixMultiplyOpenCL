@@ -1,44 +1,48 @@
 #include <stdio.h>
 #include <CL/cl.h>
+#include "func.h"
 
-long loadCLKernel(const char* path, char **buf) {
-    FILE *file_pointer;
-    size_t file_size;
-    long off_end;
-    int ret;
+cl_context context;
+cl_kernel kernel;
+cl_command_queue commandQueue;
 
-    file_pointer = fopen(path, "r");
-    if (NULL == file_pointer) {
-        return -1L;
+char *matrixMultiply(const char *first_matrix, const char *second_matrix, int matrix_order){
+    cl_int err;
+    size_t matrix_size = matrix_order * matrix_order;
+    char *result = malloc(matrix_size);
+    cl_mem first_matrix_buffer = clCreateBuffer(context, CL_MEM_READ_ONLY, matrix_size, NULL, &err);
+    cl_mem second_matrix_buffer = clCreateBuffer(context, CL_MEM_READ_ONLY, matrix_size, NULL, &err);
+    cl_mem result_matrix_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, matrix_size, NULL, &err);
+    if (err != CL_SUCCESS){
+        printf("Error: Failed to allocate device memory!\n");
+        exit(1);
     }
 
-    ret = fseek(file_pointer, 0L, SEEK_END);
-    if (0 != ret) {
-        return -1L;
+    err = clEnqueueWriteBuffer(commandQueue, first_matrix_buffer, CL_FALSE, 0, matrix_size, (void *)first_matrix, 0, NULL, NULL);
+    err = clEnqueueWriteBuffer(commandQueue, second_matrix_buffer, CL_FALSE, 0, matrix_size, (void *) second_matrix, 0, NULL, NULL);
+    if (err != CL_SUCCESS){
+        printf("Error: Failed clEnqueueWriteBuffer");
+        exit(1);
     }
 
-    if (0 > (off_end = ftell(file_pointer))) {
-        return -1L;
-    }
-    file_size = (size_t) off_end;
-
-    *buf = (char *) malloc(file_size + 1);
-    if (NULL == *buf) {
-        return -1L;
-    }
-
-    rewind(file_pointer);
-
-    size_t read_elements_count = fread(*buf, sizeof(char), file_size, file_pointer);
-
-    if (EOF == fclose(file_pointer)) {
-        free(*buf);
-        return -1L;
+    err = clSetKernelArg(kernel, 0, sizeof(cl_mem), (void *) &result_matrix_buffer);
+    err = clSetKernelArg(kernel, 1, sizeof(cl_mem), (void *) &first_matrix_buffer);
+    err = clSetKernelArg(kernel, 2, sizeof(cl_mem), (void *) &second_matrix_buffer);
+    err = clSetKernelArg(kernel, 3, sizeof(int), (void *)&matrix_order);
+    if(err != CL_SUCCESS){
+        printf("Error: Failed clSetKernelArg");
+        exit(1);
     }
 
-    (*buf)[read_elements_count] = '\0';
+    const size_t global_work_size[] = {(size_t)matrix_order, (size_t)matrix_order};
+    err = clEnqueueNDRangeKernel(commandQueue, kernel, 2, NULL, global_work_size, NULL, 0, NULL, NULL);
+    err = clEnqueueReadBuffer(commandQueue, result_matrix_buffer, CL_TRUE, 0, matrix_size, result, 0, NULL, NULL);
+    if (err != CL_SUCCESS){
+        printf("\"Error: Failed to execute kernel! %d\n", err);
+        exit(1);
+    }
 
-    return (long) read_elements_count;
+    return result;
 }
 
 int main() {
@@ -61,13 +65,13 @@ int main() {
             CL_CONTEXT_PLATFORM,
             (cl_context_properties)platformIds[0], 0
     };
-    cl_context context = clCreateContextFromType(properties, CL_DEVICE_TYPE_GPU, NULL, NULL, &error);
+    context = clCreateContextFromType(properties, CL_DEVICE_TYPE_GPU, NULL, NULL, &error);
     if (error != CL_SUCCESS){
         printf("Fail clCreateContextFromType");
         return EXIT_FAILURE;
     }
 
-    cl_command_queue commandQueue = clCreateCommandQueue(context, deviceIDs[0], 0, &error);
+    commandQueue = clCreateCommandQueue(context, deviceIDs[0], 0, &error);
     if (error != CL_SUCCESS){
         printf("Fail clCreateCommandQueue");
         return EXIT_FAILURE;
@@ -81,17 +85,29 @@ int main() {
     }
 
     cl_program program = clCreateProgramWithSource(context, 1, (const char **) &kernelSource, NULL, &error);
+    free(kernelSource);
     if (error != CL_SUCCESS){
         printf("Fail clCreateProgramWithSource");
         return EXIT_FAILURE;
     }
     if (clBuildProgram(program, 0, NULL, NULL, NULL, NULL) != CL_SUCCESS){
-        printf("Fail");
+        printf("Fail clBuildProgram");
+        return EXIT_FAILURE;
     }
 
-    cl_kernel kernel = clCreateKernel(program, "matrixMult", &error);
+    kernel = clCreateKernel(program, "matrixMult", &error);
     if (error != CL_SUCCESS){
-        printf("Fail");
+        printf("Fail clCreateKernel");
+        return EXIT_FAILURE;
     }
+
+    char A[4] = {0, 0, 1, 0};
+    char B[4] = {0, 1, 0, 1};
+    char matrix_order = 2;
+    char *result = matrixMultiply(A, B, matrix_order);
+    for (int i = 0; i < 4; i++){
+        printf("%i ", result[i]);
+    }
+
     return 0;
 }
