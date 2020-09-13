@@ -8,7 +8,7 @@ extern cl_kernel kernel;
 char *multiplyMatrix(const char *first_matrix, const char *second_matrix, int matrix_order) {
     cl_int err;
     size_t matrix_size = matrix_order * matrix_order;
-    char *result = malloc(matrix_size);
+    char *result = (char *)malloc(matrix_size);
     cl_mem first_matrix_buffer = clCreateBuffer(context, CL_MEM_READ_ONLY, matrix_size, NULL, &err);
     cl_mem second_matrix_buffer = clCreateBuffer(context, CL_MEM_READ_ONLY, matrix_size, NULL, &err);
     cl_mem result_matrix_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, matrix_size, NULL, &err);

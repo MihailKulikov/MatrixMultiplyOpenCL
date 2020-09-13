@@ -1,32 +1,33 @@
-#include "func.h"
+#include <CL/cl.h>
+#include <stdio.h>
 
 cl_context context;
 cl_kernel kernel;
 cl_command_queue commandQueue;
 
+void initializeOpenCL();
+char *multiplyMatrix(const char *first_matrix, const char *second_matrix, int matrix_order);
+
 int main() {
     initializeOpenCL();
-    char A[4] = {0, 1, 0, 0};
-    char B[4] = {1, 1, 1, 1};
-    char matrix_order = 2;
-    char *result = multiplyMatrix(A, B, matrix_order);
-    for (int i = 0; i < 4; i++) {
-        printf("%i ", result[i]);
+
+    printf("Enter the number of vertices of the graph\n");
+    int vCount = 0;
+    scanf("%i", &vCount);
+
+    printf("Enter incidence table of the graph\n");
+    char *incidenceTable = (char *)malloc(vCount * vCount);
+    for (int i = 0; i < vCount * vCount; i++){
+        scanf("%i", &incidenceTable[i]);
     }
 
-    int test_order = 10000;
-    char *C = malloc(test_order * test_order);
-    char *D = malloc(test_order * test_order);
-    for (int i = 0; i < test_order * test_order; i++){
-        C[i] = 0;
-        D[i] = 0;
+    for (int i = 0; i < vCount; i++){
+        for (int j = 0; j < vCount; j++){
+            printf("%i%s", incidenceTable[i * vCount + j], (j < vCount - 1) ? " " : "\n");
+        }
     }
-    result = multiplyMatrix(C, D, test_order);
-    for (int i = 0; i < 250000; ++i){
-        printf("%i ", result[i]);
-    }
-    free(C);
-    free(D);
+
+    free(incidenceTable);
     clReleaseContext(context);
     clReleaseKernel(kernel);
     clReleaseCommandQueue(commandQueue);
