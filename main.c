@@ -13,8 +13,8 @@ void runAllTests();
 int main(int argc, char *argv[]) {
     initializeOpenCL();
     int opt;
-    while((opt = getopt(argc, argv, "t"))!= -1){
-        switch(opt){
+    while ((opt = getopt(argc, argv, "t")) != -1) {
+        switch (opt) {
             case 't': {
                 runAllTests();
 
@@ -28,18 +28,18 @@ int main(int argc, char *argv[]) {
     scanf("%i", &vCount);
 
     printf("Enter incidence table of the graph\n");
-    char *incidenceTable = (char *)malloc(vCount * vCount);
-    for (int i = 0; i < vCount * vCount; i++){
-        scanf("%i", &incidenceTable[i]);
+    char *adjacencyMatrix = (char *) malloc(vCount * vCount);
+    for (int i = 0; i < vCount * vCount; i++) {
+        scanf("%i", &adjacencyMatrix[i]);
     }
 
-    for (int i = 0; i < vCount; i++){
-        for (int j = 0; j < vCount; j++){
-            printf("%i%s", incidenceTable[i * vCount + j], (j < vCount - 1) ? " " : "\n");
+    for (int i = 0; i < vCount; i++) {
+        for (int j = 0; j < vCount; j++) {
+            printf("%i%s", adjacencyMatrix[i * vCount + j], (j < vCount - 1) ? " " : "\n");
         }
     }
 
-    free(incidenceTable);
+    free(adjacencyMatrix);
     clReleaseContext(context);
     clReleaseKernel(kernel);
     clReleaseCommandQueue(commandQueue);
