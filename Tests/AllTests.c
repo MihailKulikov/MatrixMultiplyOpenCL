@@ -2,12 +2,14 @@
 #include <stdio.h>
 
 CuSuite *multiplyMatrixGetSuite();
+CuSuite *transitiveClosureGetSuite();
 
 void runAllTests() {
     CuString *output = CuStringNew();
     CuSuite *suite = CuSuiteNew();
 
     CuSuiteAddSuite(suite, multiplyMatrixGetSuite());
+    CuSuiteAddSuite(suite, transitiveClosureGetSuite());
 
     CuSuiteRun(suite);
     CuSuiteSummary(suite, output);

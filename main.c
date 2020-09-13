@@ -7,7 +7,7 @@ cl_kernel kernel;
 cl_command_queue commandQueue;
 
 void initializeOpenCL();
-char *multiplyMatrix(const char *first_matrix, const char *second_matrix, int matrix_order);
+char *getTransitiveClosure(char *, int);
 void runAllTests();
 
 int main(int argc, char *argv[]) {
@@ -33,9 +33,11 @@ int main(int argc, char *argv[]) {
         scanf("%i", &adjacencyMatrix[i]);
     }
 
+    char *result = getTransitiveClosure(adjacencyMatrix, vCount);
+
     for (int i = 0; i < vCount; i++) {
         for (int j = 0; j < vCount; j++) {
-            printf("%i%s", adjacencyMatrix[i * vCount + j], (j < vCount - 1) ? " " : "\n");
+            printf("%i%s", result[i * vCount + j], (j < vCount - 1) ? " " : "\n");
         }
     }
 
