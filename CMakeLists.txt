@@ -6,5 +6,5 @@ set(CMAKE_C_STANDARD 99)
 find_package(OpenCL REQUIRED)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/kernel.cl
         ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
-add_executable(MatrixMult main.c loadCLKernel.c initializeOpenCL.c multiplyMatrix.c TestFramework/CuTest.c TestFramework/CuTest.h Tests/testMatrixMultiply.c)
+add_executable(MatrixMult main.c loadCLKernel.c initializeOpenCL.c multiplyMatrix.c TestFramework/CuTest.c TestFramework/CuTest.h Tests/testMatrixMultiply.c Tests/AllTests.c)
 target_link_libraries(MatrixMult OpenCL::OpenCL)

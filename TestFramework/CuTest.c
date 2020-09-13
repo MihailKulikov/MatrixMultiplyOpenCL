@@ -337,5 +337,3 @@ void CuSuiteDetails(CuSuite* testSuite, CuString* details)
         CuStringAppendFormat(details, "Fails: %d\n",  testSuite->failCount);
     }
 }
-
-
