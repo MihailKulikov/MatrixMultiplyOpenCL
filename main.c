@@ -7,7 +7,7 @@ cl_kernel kernel;
 cl_command_queue commandQueue;
 
 void initializeOpenCL();
-char *getTransitiveClosure(char *, int);
+char *getTransitiveClosure(char *, const char *, int);
 void runAllTests();
 
 int main(int argc, char *argv[]) {
@@ -33,7 +33,8 @@ int main(int argc, char *argv[]) {
         scanf("%i", &adjacencyMatrix[i]);
     }
 
-    char *result = getTransitiveClosure(adjacencyMatrix, vCount);
+    char *result = malloc(vCount * vCount);
+    getTransitiveClosure(result, adjacencyMatrix, vCount);
 
     for (int i = 0; i < vCount; i++) {
         for (int j = 0; j < vCount; j++) {
@@ -41,6 +42,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    free(result);
     free(adjacencyMatrix);
     clReleaseContext(context);
     clReleaseKernel(kernel);

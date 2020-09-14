@@ -1,28 +1,40 @@
-#include <stdio.h>
+#include <malloc.h>
+#include <string.h>
 
-char *multiplyMatrix(const char *, const char *, int);
+void *multiplyMatrix(char *, const char *, const char *, int);
 
-char *getTransitiveClosure(char *adjacency_matrix, int node_count){
-    if (node_count == 0 || node_count == 1)
-        return adjacency_matrix;
+void *getTransitiveClosure(char *result, const char *adjacency_matrix, int node_count) {
+    if (node_count == 0)
+        return result;
 
-    for (int i = 0; i < node_count; i++){
-        adjacency_matrix[i * node_count + i] = 1;
+    if (node_count == 1) {
+        result[0] = 1;
+        return result;
     }
 
-    char *res = NULL;
+    char *local_adjacency_matrix = malloc(node_count * node_count);
+    memcpy(local_adjacency_matrix, adjacency_matrix, node_count * node_count);
+
+    for (int i = 0; i < node_count; i++) {
+        local_adjacency_matrix[i * node_count + i] = 1;
+    }
+
+    char flag = 0;
     int power = node_count - 1;
     while (power)
-        if (power & 1){
-            if (res == NULL)
-                res = adjacency_matrix;
-            else
-                res = multiplyMatrix(res, adjacency_matrix, node_count);
+        if (power & 1) {
+            if (flag == 0) {
+                flag++;
+                memcpy(result, local_adjacency_matrix, node_count * node_count);
+            } else {
+                multiplyMatrix(result, result, local_adjacency_matrix, node_count);
+            }
             --power;
-        }else{
-            adjacency_matrix = multiplyMatrix(adjacency_matrix, adjacency_matrix, node_count);
+        } else {
+            multiplyMatrix(local_adjacency_matrix, local_adjacency_matrix, local_adjacency_matrix, node_count);
             power >>= 1;
         }
 
-    return res;
+    free(local_adjacency_matrix);
+    return result;
 }

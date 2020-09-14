@@ -5,13 +5,12 @@ extern cl_context context;
 extern cl_command_queue commandQueue;
 extern cl_kernel kernel;
 
-char *multiplyMatrix(const char *first_matrix, const char *second_matrix, int matrix_order) {
+void *multiplyMatrix(char *result, const char *first_matrix, const char *second_matrix, int matrix_order) {
     cl_int err;
     size_t matrix_size = matrix_order * matrix_order;
-    char *result = (char *)malloc(matrix_size);
     cl_mem first_matrix_buffer = clCreateBuffer(context, CL_MEM_READ_ONLY, matrix_size, NULL, &err);
     cl_mem second_matrix_buffer = clCreateBuffer(context, CL_MEM_READ_ONLY, matrix_size, NULL, &err);
-    cl_mem result_matrix_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, matrix_size, NULL, &err);
+    cl_mem result_matrix_buffer = clCreateBuffer(context, CL_MEM_WRITE_ONLY, matrix_size, NULL, &err);
     if (!first_matrix_buffer || !second_matrix_buffer || !result_matrix_buffer) {
         printf("Error: Failed to allocate device memory!\n");
         exit(1);

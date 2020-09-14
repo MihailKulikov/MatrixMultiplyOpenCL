@@ -11,7 +11,7 @@ matrixMult(__global char *result_matrix,
     {
         char elementA = first_matrix[current_row * matrix_order + i];
         char elementB = second_matrix[i * matrix_order + current_column];
-        value = elementA && elementB;
+        value = elementA & elementB;
         if (value)
             break;
     }
