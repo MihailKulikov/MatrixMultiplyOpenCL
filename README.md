@@ -14,9 +14,9 @@ Linux:
 ```
 >mkdir build
 >cd build
->cmake ..
-> cmake --build ..
->.\MatrixMult
+>cmake ../
+>cmake --build ../
+>./MatrixMult
 ```
 
 # Test
@@ -26,5 +26,5 @@ Windows:
 ```
 Linux:
 ```
->.\MatrixMult -t
+>./MatrixMult -t
 ```
