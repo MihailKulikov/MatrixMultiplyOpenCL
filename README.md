@@ -1,7 +1,7 @@
 # OpenCL matrix multiplying (naive realisation)
 
 
-# Install
+# Build
 Windows:
 ```
 >mkdir build
