@@ -17,3 +17,13 @@ Linux:
 >cmake ..
 > cmake --build ..
 >.\MatrixMult
+```
+
+# Test
+```
+>MatrixMult.exe -t 
+```
+or
+```
+>.\MatrixMult -t
+```
