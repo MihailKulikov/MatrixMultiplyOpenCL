@@ -1,6 +1,5 @@
 #include <CL/cl.h>
 #include <stdio.h>
-#include <unistd.h>
 
 cl_context context;
 cl_kernel kernel;
@@ -12,16 +11,13 @@ void runAllTests();
 
 int main(int argc, char *argv[]) {
     initializeOpenCL();
-    int opt;
-    while ((opt = getopt(argc, argv, "t")) != -1) {
-        switch (opt) {
-            case 't': {
-                runAllTests();
-
-                return 0;
-            }
-        }
+    for (int i = 1; i < argc; i++){
+	if (argv[i][0] == '-' && argv[i][1] == 't'){
+		runAllTests();
+		return 0;
+	    }
     }
+	
 
     printf("Enter the number of vertices of the graph\n");
     int vCount = 0;
@@ -33,7 +29,7 @@ int main(int argc, char *argv[]) {
         scanf("%i", &adjacencyMatrix[i]);
     }
 
-    char *result = malloc(vCount * vCount);
+    char *result = (char *)malloc(vCount * vCount);
     getTransitiveClosure(result, adjacencyMatrix, vCount);
 
     for (int i = 0; i < vCount; i++) {
