@@ -20,10 +20,11 @@ Linux:
 ```
 
 # Test
+Windows:
 ```
 >MatrixMult.exe -t 
 ```
-or
+Linux:
 ```
 >.\MatrixMult -t
 ```
