@@ -11,25 +11,26 @@ void runAllTests();
 
 int main(int argc, char *argv[]) {
     initializeOpenCL();
-    for (int i = 1; i < argc; i++){
-	if (argv[i][0] == '-' && argv[i][1] == 't'){
-		runAllTests();
-		return 0;
-	    }
+    for (int i = 1; i < argc; i++) {
+        if (argv[i][0] == '-' && argv[i][1] == 't') {
+            runAllTests();
+            return 0;
+        }
     }
-	
+
 
     printf("Enter the number of vertices of the graph\n");
     int vCount = 0;
     scanf("%i", &vCount);
+    int vCountSqr = vCount * vCount;
 
     printf("Enter incidence table of the graph\n");
-    char *adjacencyMatrix = (char *) malloc(vCount * vCount);
-    for (int i = 0; i < vCount * vCount; i++) {
+    char *adjacencyMatrix = (char *) malloc(vCountSqr * sizeof(char));
+    for (int i = 0; i < vCountSqr; i++) {
         scanf("%i", &adjacencyMatrix[i]);
     }
 
-    char *result = (char *)malloc(vCount * vCount);
+    char *result = (char *) malloc(vCountSqr * sizeof(char));
     getTransitiveClosure(result, adjacencyMatrix, vCount);
 
     for (int i = 0; i < vCount; i++) {

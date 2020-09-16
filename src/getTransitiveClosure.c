@@ -12,7 +12,7 @@ void *getTransitiveClosure(char *result, const char *adjacency_matrix, int node_
         return result;
     }
 
-    char *local_adjacency_matrix = malloc(node_count * node_count);
+    char *local_adjacency_matrix = (char *) malloc(node_count * node_count * sizeof(char));
     memcpy(local_adjacency_matrix, adjacency_matrix, node_count * node_count);
 
     for (int i = 0; i < node_count; i++) {

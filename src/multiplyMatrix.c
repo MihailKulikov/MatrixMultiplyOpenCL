@@ -38,7 +38,7 @@ void *multiplyMatrix(char *result, const char *first_matrix, const char *second_
     err = clEnqueueNDRangeKernel(commandQueue, kernel, 2, NULL, global_work_size, NULL, 0, NULL, NULL);
     err |= clEnqueueReadBuffer(commandQueue, result_matrix_buffer, CL_TRUE, 0, matrix_size, result, 0, NULL, NULL);
     if (err != CL_SUCCESS) {
-        printf("\"Error: Failed to execute kernel! %d\n", err);
+        printf("Error: Failed to execute kernel! %d\n", err);
         exit(1);
     }
 
