@@ -1,7 +1,7 @@
 # OpenCL matrix multiplying (naive realisation)
 
 
-# Install
+# Build
 Windows:
 ```
 >mkdir build
@@ -14,6 +14,17 @@ Linux:
 ```
 >mkdir build
 >cd build
->cmake ..
-> cmake --build ..
->.\MatrixMult
+>cmake ../
+>cmake --build ../
+>./MatrixMult
+```
+
+# Test
+Windows:
+```
+>MatrixMult.exe -t 
+```
+Linux:
+```
+>./MatrixMult -t
+```
